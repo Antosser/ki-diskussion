@@ -3,6 +3,7 @@ from gtts import gTTS
 import os
 from dotenv import load_dotenv
 import sys
+import re
 
 # Load environment variables from a .env file
 load_dotenv()
@@ -41,6 +42,13 @@ def read_prompt_file(file_path):
         # Handle any unexpected errors
         print(f"Unexpected error while reading {file_path}: {e}")
         sys.exit(1)
+
+
+# Function to get the first 10 alphanumeric characters of the "thema"
+def get_file_name_from_thema(thema):
+    # Remove non-alphanumeric characters and get the first 10 characters
+    alphanumeric_thema = re.sub(r"[^a-zA-Z0-9]", "", thema)
+    return alphanumeric_thema[:10]  # Return up to 10 characters
 
 
 # Main function to handle the conversation flow and saving the output
@@ -130,21 +138,24 @@ def main():
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)  # Create the directory if it doesn't exist
 
+    # Generate the file name based on the "thema"
+    file_name = get_file_name_from_thema(thema)
+
     # Serialize the conversation to a text file in the "generated_text" directory
     try:
         output_path = os.path.join(
-            output_dir, f"{thema}.txt"
+            output_dir, f"{file_name}.txt"
         )  # Construct the file path
         with open(output_path, "w") as f:
             f.write(repr(conversation))  # Save the conversation history to the file
         print(f"File saved to {output_path}")  # Inform the user where the file is saved
     except PermissionError:
         # Handle case where there are permission issues while saving the file
-        print(f"Error: Permission denied when saving {thema}.txt.")
+        print(f"Error: Permission denied when saving {file_name}.txt.")
         sys.exit(1)
     except Exception as e:
         # Handle unexpected errors while saving the file
-        print(f"Unexpected error while saving {thema}.txt: {e}")
+        print(f"Unexpected error while saving {file_name}.txt: {e}")
         sys.exit(1)
 
 
