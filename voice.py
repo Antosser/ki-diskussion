@@ -24,15 +24,6 @@ def read_dialog(file_path):
         sys.exit(1)
 
 
-# Read the dialog from the provided input file
-if len(sys.argv) < 2:
-    print("Usage: python script.py <dialog_file>")
-    sys.exit(1)
-
-dialog_file_path = sys.argv[1]
-dialog = read_dialog(dialog_file_path)
-
-
 # Function to generate speech using Google Cloud Text-to-Speech API
 def text_to_speech(text, lang="de-DE", gender="male"):
     try:
@@ -43,15 +34,14 @@ def text_to_speech(text, lang="de-DE", gender="male"):
         synthesis_input = texttospeech.SynthesisInput(text=text)
 
         # Choose voice based on gender
-        if gender == "male":
-            voice_name = "de-DE-Journey-D"  # Male voice
-        else:
-            voice_name = "de-DE-Journey-O"  # Female voice
+        voice_name = (
+            "de-DE-Journey-D" if gender == "male" else "de-DE-Journey-O"
+        )  # Male or Female voice
 
         # Set voice parameters (language and specific voice)
         voice = texttospeech.VoiceSelectionParams(
             language_code=lang,
-            name=voice_name,  # Use specific voice (Journey-D or Journey-F)
+            name=voice_name,  # Use specific voice (Journey-D or Journey-O)
         )
 
         # Set audio configuration (MP3 format)
@@ -81,61 +71,82 @@ def text_to_speech(text, lang="de-DE", gender="male"):
         return None
 
 
-# Create a directory for storing the audio files
-output_dir = "generated_audio"
-os.makedirs(output_dir, exist_ok=True)
+# Function to combine audio files with 2-second pauses
+def combine_audio_files(audio_files):
+    print("Combining audio files with 2-second pauses...")
+    combined = AudioSegment.empty()
 
-# List to store the generated audio files
-audio_files = []
+    for idx, audio_file in enumerate(audio_files):
+        print(f"Processing audio file {idx + 1}/{len(audio_files)}: {audio_file}")
 
-# Use ThreadPoolExecutor to process the dialog in parallel
-with ThreadPoolExecutor(max_workers=5) as executor:
-    future_to_audio = {}
-    for idx, text in enumerate(dialog):
-        if idx % 2 == 0:
-            gender = "male"  # First, third, fifth... messages will be male
-        else:
-            gender = "female"  # Second, fourth, sixth... messages will be female
-
-        # Submit each task to the executor
-        future = executor.submit(text_to_speech, text, "de-DE", gender)
-        future_to_audio[future] = text
-
-    # Collect the results as they complete
-    for future in as_completed(future_to_audio):
         try:
-            audio_file_path = future.result()
-            if audio_file_path:
-                audio_files.append(audio_file_path)
+            # Load the generated audio file (assuming MP3 format)
+            speech = AudioSegment.from_mp3(audio_file)
+
+            # Append the audio file to the combined output
+            combined += speech
+
+            # Add a 2-second silence (2000 milliseconds)
+            silence = AudioSegment.silent(duration=2000)  # 2 seconds of silence
+            combined += silence
+
         except Exception as e:
-            print(f"Error processing future task: {e}")
+            print(f"Error loading audio file {audio_file}: {e}")
 
-# Now combine all the audio files with a 2-second silence between them
-print("Combining audio files with 2-second pauses...")
-
-combined = AudioSegment.empty()
-
-for idx, audio_file in enumerate(audio_files):
-    print(f"Processing audio file {idx + 1}/{len(audio_files)}: {audio_file}")
-
+    # Export the final combined audio to an output file
+    output_file = "combined_output.mp3"
     try:
-        # Load the generated audio file (assuming MP3 format)
-        speech = AudioSegment.from_mp3(audio_file)
-
-        # Append the audio file to the combined output
-        combined += speech
-
-        # Add a 2-second silence (2000 milliseconds)
-        silence = AudioSegment.silent(duration=2000)  # 2 seconds of silence
-        combined += silence
-
+        combined.export(output_file, format="mp3")
+        print(f"\nFinal combined audio saved to {output_file}")
     except Exception as e:
-        print(f"Error loading audio file {audio_file}: {e}")
+        print(f"Error exporting combined audio: {e}")
 
-# Export the final combined audio to an output file
-output_file = "combined_output.mp3"
-try:
-    combined.export(output_file, format="mp3")
-    print(f"\nFinal combined audio saved to {output_file}")
-except Exception as e:
-    print(f"Error exporting combined audio: {e}")
+
+# Main function to orchestrate the process
+def main():
+    # Read the dialog from the provided input file
+    if len(sys.argv) < 2:
+        print("Usage: python script.py <dialog_file>")
+        sys.exit(1)
+
+    dialog_file_path = sys.argv[1]
+    dialog = read_dialog(dialog_file_path)
+
+    # Create a directory for storing the audio files
+    output_dir = "generated_audio"
+    os.makedirs(output_dir, exist_ok=True)
+
+    # List to store the generated audio files in the correct order
+    audio_files = [None] * len(dialog)
+
+    # Use ThreadPoolExecutor to process the dialog in parallel
+    with ThreadPoolExecutor(max_workers=5) as executor:
+        future_to_idx = {}
+        for idx, text in enumerate(dialog):
+            gender = (
+                "male" if idx % 2 == 0 else "female"
+            )  # Alternate male/female voices
+
+            # Submit each task to the executor
+            future = executor.submit(text_to_speech, text, "de-DE", gender)
+            future_to_idx[future] = idx  # Map future to its dialog index
+
+        # Collect the results as they complete
+        for future in as_completed(future_to_idx):
+            try:
+                audio_file_path = future.result()
+                if audio_file_path:
+                    idx = future_to_idx[future]
+                    audio_files[idx] = (
+                        audio_file_path  # Place result in the correct order
+                    )
+            except Exception as e:
+                print(f"Error processing future task: {e}")
+
+    # Combine audio files in the correct order
+    combine_audio_files(audio_files)
+
+
+# Entry point of the script
+if __name__ == "__main__":
+    main()
