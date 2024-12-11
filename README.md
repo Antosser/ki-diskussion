@@ -13,6 +13,7 @@ Dieses Projekt ermöglicht es, ein Gespräch zwischen zwei Positionen (Pro und C
 - Python 3.x
 - Python-Pakete: `openai`, `gtts`, `google-cloud-texttospeech`, `pydub`, `dotenv`
 - Google Cloud Text-to-Speech API-Anmeldeinformationen (Service Account-Datei)
+- OpenAI API-Key
 
 ### Installiere die benötigten Pakete
 
