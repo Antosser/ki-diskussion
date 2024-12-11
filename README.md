@@ -73,7 +73,7 @@ Beide Skripte beinhalten eine Fehlerbehandlung für häufige Probleme wie fehlen
 
 ## Lizenz
 
-Dieses Projekt ist unter der MIT-Lizenz lizenziert. Siehe die [LICENSE](LICENSE)-Datei für Details.
+Dieses Projekt ist unter der GPLv3-Lizenz lizenziert. Siehe die [LICENSE](LICENSE)-Datei für Details.
 
 ---
 
