@@ -22,16 +22,6 @@ Installiere die benötigten Abhängigkeiten, indem du den folgenden Befehl ausf�
 pip install -r requirements.txt
 ```
 
-Erstelle eine `requirements.txt`-Datei, falls diese noch nicht existiert:
-
-```
-openai
-gtts
-google-cloud-texttospeech
-pydub
-python-dotenv
-```
-
 ### Setup der `.env`-Datei
 
 Erstelle eine `.env`-Datei im Projektstammverzeichnis mit folgendem Inhalt:
