@@ -1,0 +1,6 @@
+venv/
+.env
+service_account.json
+*.mp3
+generated_audio/
+generated_text/

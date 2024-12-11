@@ -1,0 +1,5 @@
+pydub
+google-cloud-texttospeech
+python-dotenv
+openai
+gTTS
