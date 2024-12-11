@@ -12,6 +12,6 @@
 
 **Hinweis:** Bringe bei jeder Widerlegung und Argumentation neue Perspektiven oder Beispiele ein, um die Diskussion voranzubringen und nicht nur zu wiederholen, was bereits gesagt wurde.
 
-**Schreibe nur die gesagten Worte ohne Verwendung von Gliederungen oder Symbolen.**
+**Schreibe nur die gesagten Worte ohne Verwendung von Gliederungen oder Symbolen. Baue keine Absätze oder Zeilenbrüche ein**
 
 **Thema:** {{thema}}

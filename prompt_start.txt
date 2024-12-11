@@ -9,6 +9,6 @@
 
 **Hinweis:** Biete in deiner Einführung eine neutrale Darstellung des Themas, bevor du deine Argumente aus deiner Perspektive darlegst.
 
-**Schreibe nur die gesagten Worte ohne Verwendung von Gliederungen oder Symbolen.**
+**Schreibe nur die gesagten Worte ohne Verwendung von Gliederungen oder Symbolen. Baue keine Absätze oder Zeilenbrüche ein**
 
 **Thema:** {{thema}}
