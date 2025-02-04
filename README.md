@@ -30,6 +30,7 @@ Erstelle eine `.env`-Datei im Projektstammverzeichnis mit folgendem Inhalt:
 ```
 OPENAI_API_KEY=dein_openai_api_schluessel_hier
 GOOGLE_APPLICATION_CREDENTIALS=pfad_zu_deiner_google_service_account_json
+TAVILY_API_KEY=tvly_api_key_hier
 ```
 
 Stelle sicher, dass du die Platzhalter mit deinem tatsächlichen OpenAI API-Schlüssel und dem Pfad zu deiner Google Cloud Service Account JSON-Datei ersetzt.

@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 import sys
 import re
+import tavily
 
 # Load environment variables from a .env file
 load_dotenv()
@@ -16,6 +17,9 @@ if not OPENAI_API_KEY:
 
 # Set the OpenAI API key
 openai.api_key = OPENAI_API_KEY
+
+TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
+tavily_client = tavily.TavilyClient(api_key=TAVILY_API_KEY)
 
 
 # Define the positions for the conversation (Pro or Contra)
@@ -75,6 +79,10 @@ def main():
         print(f"Error: {e}")
         sys.exit(1)
 
+    context = tavily_client.get_search_context(thema)
+    print(f"Kontext aus dem Internet:\n{context}")
+    print("---")
+
     # Loop through the number of iterations to generate the conversation
     for i in range(iterations):
         # Determine which prompt file to use based on the iteration
@@ -92,6 +100,7 @@ def main():
                 "{{procontra}}", "pro" if current_position == Position.PRO else "contra"
             )
             .replace("{{thema}}", thema)
+            .replace("{{context}}", context)
         )
 
         # Prepare the conversation history for OpenAI API request

@@ -3,3 +3,5 @@ google-cloud-texttospeech
 python-dotenv
 openai
 gTTS
+tavily-python
+audioop-lts
