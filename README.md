@@ -1,6 +1,6 @@
 # KI-Diskussion-Generator
 
-Dieses Projekt ermöglicht es, ein Gespräch zwischen zwei Positionen (Pro und Contra) zu einem gegebenen Thema mit der GPT-4 API von OpenAI zu generieren und dieses Gespräch anschließend mit der Google Cloud Text-to-Speech API in Sprache umzuwandeln. Das Projekt besteht aus zwei Hauptskripten: `text.py` und `voice.py`, sowie einer `.env`-Datei, die API-Schlüssel sicher speichert.
+Dieses Projekt ermöglicht es, ein Gespräch zwischen zwei Positionen (Pro und Contra) zu einem gegebenen Thema mit der GPT-4 API von OpenAI zu generieren und dieses Gespräch anschließend mit der Google Cloud Text-to-Speech API in Sprache umzuwandeln. Mithilfe von TAVILY kann die KI mehr Kontext zu den angenebenem Thema im Internet finden. Das Projekt besteht aus zwei Hauptskripten: `text.py` und `voice.py`, sowie einer `.env`-Datei, die API-Schlüssel sicher speichert.
 
 ## Dateien
 
@@ -28,9 +28,9 @@ pip install -r requirements.txt
 Erstelle eine `.env`-Datei im Projektstammverzeichnis mit folgendem Inhalt:
 
 ```
-OPENAI_API_KEY=dein_openai_api_schluessel_hier
-GOOGLE_APPLICATION_CREDENTIALS=pfad_zu_deiner_google_service_account_json
-TAVILY_API_KEY=tvly_api_key_hier
+OPENAI_API_KEY=dein_openai_api_schluessel_hier // Mit Balance
+GOOGLE_APPLICATION_CREDENTIALS=pfad_zu_deiner_google_service_account_json // Mit Cloud Text-To-Speech API aktiviert 
+TAVILY_API_KEY=tvly_api_key_hier // tavily.com
 ```
 
 Stelle sicher, dass du die Platzhalter mit deinem tatsächlichen OpenAI API-Schlüssel und dem Pfad zu deiner Google Cloud Service Account JSON-Datei ersetzt.
